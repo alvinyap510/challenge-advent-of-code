@@ -1,3 +1,6 @@
+// Bear with me the spagetti code
+// Was meant to solve it quick
+
 /* Imports */
 const fs = require("fs");
 const readline = require("readline");
