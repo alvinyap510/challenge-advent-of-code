@@ -51,12 +51,6 @@ function processTxt(linesArray) {
       instanceArray[j + 1] += 1 * instanceArray[i];
       extraCards += 1;
     }
-    // let extraCard = 0;
-    // for (let j = i; extraCard < match; j++) {
-    //   //   console.log(i, j);
-    //   instanceArray[j] += 1;
-    //   extraCard += 1;
-    // }
     i++;
   }
   let sum = 0;
