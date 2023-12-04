@@ -14,7 +14,7 @@ function findFirstDigit(text) {
 
 // Helper function to find last digit occurrence
 function findLastDigit(text) {
-  for (let i = text.length; i >= 0; i--) {
+  for (let i = text.length - 1; i >= 0; i--) {
     if (text.charCodeAt(i) >= 48 && text.charCodeAt(i) <= 57) {
       return text[i];
     }
