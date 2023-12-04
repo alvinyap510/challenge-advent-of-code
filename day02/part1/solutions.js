@@ -60,7 +60,7 @@ async function main() {
     for (line of linesArray) {
       sum += parseLine(line);
     }
-    console.log(sum);
+    console.log("Answer: ", sum);
   });
 }
 
