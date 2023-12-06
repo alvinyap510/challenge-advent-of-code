@@ -128,5 +128,3 @@ async function main() {
 }
 
 main();
-
-// Answer => 993500720
