@@ -9,6 +9,24 @@
 const fs = require("fs");
 const readline = require("readline");
 
+/***  ***/
+const CARDS_ORDER = [
+  "A",
+  "K",
+  "Q",
+  "J",
+  "T",
+  "9",
+  "8",
+  "7",
+  "6",
+  "5",
+  "4",
+  "3",
+  "2",
+];
+
+/*** Utilities & Helper Functions ***/
 function isFiveOfAKind(cardCounter) {
   for (let card in cardCounter) {
     if (cardCounter[card] === 5) return true;
@@ -63,7 +81,6 @@ function isOnePair(cardCounter) {
   return false;
 }
 
-/*** Utilities & Helper Functions ***/
 // Determine the strength of a hand
 // Five of a kind   : 7
 // Four of a kind   : 6
@@ -98,6 +115,52 @@ function determineHandStrength(hand) {
   return 1; // High Card
 }
 
+function compareHands(handOne, handTwo) {
+  let handOneStrength = determineHandStrength(handOne);
+  let handTwoStrength = determineHandStrength(handTwo);
+
+  if (handOneStrength > handTwoStrength) return "left";
+  else if (handTwoStrength > handOneStrength) return "right";
+  else {
+    let handOneCards = handOne.cards;
+    let handTwoCards = handTwo.cards;
+
+    for (let i = 0; i < handTwoCards.length; i++) {
+      let cardOneIndex = CARDS_ORDER.indexOf(handOneCards[i]);
+      let cardTwoIndex = CARDS_ORDER.indexOf(handTwoCards[i]);
+      if (cardOneIndex < cardTwoIndex) return "left";
+      if (cardTwoIndex < cardOneIndex) return "right";
+    }
+  }
+}
+
+function bubbleSort(parsedHands) {
+  let n = parsedHands.length;
+  let swapped;
+
+  do {
+    swapped = false;
+    for (let i = 0; i < n - 1; i++) {
+      if (compareHands(parsedHands[i], parsedHands[i + 1]) == "left") {
+        let temp = parsedHands[i];
+        parsedHands[i] = parsedHands[i + 1];
+        parsedHands[i + 1] = temp;
+        swapped = true;
+      }
+    }
+    n--;
+  } while (swapped);
+  return parsedHands;
+}
+
+function calculateWinning(sortedHands) {
+  let sum = 0;
+  for (let i = 0; i < sortedHands.length; i++) {
+    sum += sortedHands[i].bid * (i + 1);
+  }
+  return sum;
+}
+
 function parseArguments(linesArray) {
   // Container to store parsed hands
   let parsedHands = [];
@@ -121,14 +184,20 @@ function processInputs(linesArray) {
 
   // Extract hand's value into an array of object
   const parsedHands = parseArguments(linesArray);
-  for (let hand of parsedHands) determineHandStrength(hand);
+  console.log("Unsorted Hand: ", parsedHands);
+  let sortedHands = bubbleSort(parsedHands);
+  console.log("Sorted Hand: ", sortedHands);
+  let totalWinnings = calculateWinning(sortedHands);
+  console.log("Total Winnings: ", totalWinnings);
+
+  //   for (let hand of parsedHands) determineHandStrength(hand);
 }
 
 /*** Main ***/
 
 async function main() {
   /* Create readstream */
-  const fileStream = fs.createReadStream("test_input.txt");
+  const fileStream = fs.createReadStream("input.txt");
   const rl = readline.createInterface({
     input: fileStream,
     crlfDelay: Infinity,
@@ -153,3 +222,16 @@ async function main() {
 }
 
 main();
+
+// function testMain() {
+//   const handOne = { cards: "KJT23", bid: 120 };
+//   const handTwo = { cards: "KJQ28", bid: 220 };
+
+//   console.log(determineHandStrength(handOne));
+//   console.log(determineHandStrength(handTwo));
+
+//   console.log(compareHands(handOne, handTwo));
+// }
+// testMain();
+
+// Answer: 249483956
