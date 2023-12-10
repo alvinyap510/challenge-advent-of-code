@@ -96,7 +96,3 @@ async function main() {
 }
 
 main();
-
-function testMain() {}
-
-// testMain();
